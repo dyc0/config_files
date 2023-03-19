@@ -28,9 +28,10 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+import os
 
 mod = "mod1"
-terminal = guess_terminal()
+terminal = "alacritty" 
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -129,7 +130,7 @@ layouts = [
     # Try more layouts by unleashing below layouts.
     layout.Stack(num_stacks=2),
     #layout.Bsp(),
-    layout.Matrix(),
+    #layout.Matrix(),
     #layout.MonadTall(),
     #layout.MonadWide(),
     #layout.RatioTile(),
@@ -147,7 +148,11 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 # Set proper backlight name
-widget.Backlight.backlight_name="amdgpu_bl0"
+possible_names = [x[1] for x in os.walk('/sys/class/backlight')][0]
+if len(possible_names) > 1:
+    widget.Backlight.backlight_name = "amdgpu_bl0"
+else:
+    widget.Backlight.backlight_name = possible_names[0]
 
 screens = [
     Screen(
@@ -172,7 +177,7 @@ screens = [
                 widget.Sep(), widget.TextBox("Battery"), widget.Battery(format='{percent:2.0%}'),
                 widget.Spacer(length=5), widget.Sep(), widget.TextBox("Volume"), widget.PulseVolume(),
                 widget.Spacer(length=5),  widget.Sep(), widget.TextBox("Backlight"), widget.Backlight(),
-                widget.Spacer(length=5), widget.Sep(), widget.KeyboardLayout(configured_keyboards=['us', 'rs', 'de']),
+                widget.Spacer(length=5), widget.Sep(), widget.KeyboardLayout(configured_keyboards=['us', 'rs', 'rs latin', 'de']),
                 widget.Spacer(length=5), widget.Sep(), widget.Wlan(interface="wlp3s0"),
                 widget.Spacer(length=5), widget.Sep(), widget.Clock(format="%a %d.%m.%Y %I:%M %p"),
                 widget.Systray()
