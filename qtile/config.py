@@ -29,6 +29,8 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen, KeyChord
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
+import subprocess
+from libqtile import hook
 
 mod = "mod1"
 terminal = "alacritty" 
@@ -42,7 +44,8 @@ keys = [
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
-    
+    Key([mod], "f", lazy.window.toggle_fullscreen()),
+
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
     Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -124,18 +127,19 @@ for i in groups:
         ]
     )
 
+custom_margins = [4,4,4,4]
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
-    layout.Max(),
+    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4, margin=custom_margins),
+    layout.Max(margin = custom_margins),
     # Try more layouts by unleashing below layouts.
-    layout.Stack(num_stacks=2),
+    #layout.Stack(num_stacks=2, margin=custom_margins),
     #layout.Bsp(),
     #layout.Matrix(),
     #layout.MonadTall(),
     #layout.MonadWide(),
     #layout.RatioTile(),
-    layout.Tile(),
-    layout.TreeTab(),
+    layout.Tile(margin=custom_margins),
+    #layout.TreeTab(),
     #layout.VerticalTile(),
     #layout.Zoomy(),
 ]
@@ -233,3 +237,7 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+@hook.subscribe.startup
+def autostart():
+    subprocess.call('/home/dyco/.config/qtile/autostart.sh')
