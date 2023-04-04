@@ -80,6 +80,10 @@ keys = [
     Key([mod], "d", lazy.spawn('rofi -show run')),
     Key([mod], "w", lazy.spawn('rofi -show window')),
 
+    Key([mod], "t", lazy.spawn('thunar')),
+    Key([mod], "m", lazy.spawn('thunderbird')),
+    Key([mod], "i", lazy.spawn('firefox')),
+
     # Audio
     Key([], "XF86AudioMute", lazy.spawn("amixer -D pulse sset Master toggle")),
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -D pulse sset Master 5%-")),
@@ -130,7 +134,7 @@ for i in groups:
 custom_margins = [4,4,4,4]
 layouts = [
     layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4, margin=custom_margins),
-    layout.Max(margin = custom_margins),
+    # layout.Max(margin = custom_margins),
     # Try more layouts by unleashing below layouts.
     #layout.Stack(num_stacks=2, margin=custom_margins),
     #layout.Bsp(),
