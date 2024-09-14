@@ -27,16 +27,10 @@ nnoremap <silent> <Leader>wh <C-w>h
 nnoremap <silent> <Leader>wj <C-w>j
 nnoremap <silent> <Leader>wk <C-w>k
 nnoremap <silent> <Leader>wl <C-w>l
-nnoremap <silent> <Leader>wv <C-w>v
-nnoremap <silent> <Leader>ws <C-w>s
 
 " Basic settings
-set number
 set relativenumber
-
 set shiftwidth=4
-set tabstop=4
-
 
 " PLUGINS
 
@@ -56,14 +50,15 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'mhinz/vim-startify'
 
 " Tabline
-Plug 'itchyny/lightline.vim'
+ Plug 'itchyny/lightline.vim'
+
+" Autocomplete
+Plug 'Valloric/YouCompleteMe'
 
 " Nerdtree
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Themes
 Plug 'NLKNguyen/papercolor-theme'
@@ -76,16 +71,6 @@ call plug#end()
 colorscheme everforest
 
 " NERDtree
-
-augroup NERD
-    au!
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-    autocmd VimEnter * wincmd p
-    autocmd VimEnter * call lightline#update()
-augroup END
-set laststatus=2
-
 nnoremap <silent> <Leader>ft :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen = 1
 " Close the tab if NERDTree is the only window remaining in it.
@@ -99,44 +84,7 @@ autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_
 autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
-  
+
 "Setting fzf
 let g:fzf_action = {'enter': 'tab split'}
 
-
-" SETTING COC
-set updatetime=300
-set signcolumn=yes
-
-set nowritebackup
-set nobackup
-
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Remap autocomplete confirm to tab
-inoremap <silent> <Tab> <Nop>
-inoremap <silent> <expr> <Tab> coc#pum#visible() ? coc#pum#confirm() : "\<Tab>"
-
-" Jumping around
-nmap <silent> <Leader>cd <Plug>(coc-definition)
-nmap <silent> <Leader>cy <Plug>(coc-type-definition)
-nmap <silent> <Leader>ci <Plug>(coc-implementation)
-
-" Using K to show documentation in preview window
-nnoremap <silent> <Leader>ck :call ShowDocumentation()<CR>
-
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
-" Highlighting
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-nmap <Leader>cr <Plug>(coc-rename)
